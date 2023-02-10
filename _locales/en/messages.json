@@ -1,0 +1,10 @@
+{
+"outside":{
+    "message": "outside of your domain",
+    "description": "outside of your domain phrase"
+  },
+"endorsed":{
+  "message":"neither created nor endorsed",
+  "description": "neither created nor endorsed phrase"
+}
+}

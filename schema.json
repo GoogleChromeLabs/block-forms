@@ -1,0 +1,26 @@
+{
+    "type": "object",
+    "properties": {
+      "domain": {
+        "title": "Domain name",
+        "description": "Domain from the admin console.",
+        "type": "string"
+      },
+      "allowlist": {
+        "title": "Allow List",
+        "description": "Allow listed domains",
+        "type": "array",
+        "items":{
+            "type":"string"
+        }
+      },
+      "blocklist": {
+        "title": "Block List",
+        "description": "Block Listed domains",
+        "type": "array",
+        "items":{
+            "type":"string"
+        }
+      }
+    }
+}

@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "Block Forms",
+  "version": "0.0.27",
+  "author": "Clay Smith",
+  "short_name": "Block Forms",
+  "homepage_url": "https://www.claycodes.org",
+ 
+  "default_locale": "en",
+  "description": "Block consumer forms from your domain.",
+  "icons": {
+    "19": "images/19.png",
+    "32": "images/32.png",
+    "38": "images/38.png",
+    "36": "images/36.png",
+    "64": "images/64.png",
+    "128": "images/128.png"
+  },
+  "permissions": [],
+  "host_permissions": [
+    "*://docs.google.com/*"
+  ],
+  "storage": {
+    "managed_schema": "schema.json"
+  },
+  "background": {
+		"service_worker": "background.js"
+	},
+  "content_scripts": [{
+    "run_at":"document_start",
+    "matches": [
+      "*://docs.google.com/*"
+    ],
+    "exclude_matches":[],
+    "js": ["contentscript.js"]
+  }],
+  "update_url": "https://extensionhosting.web.app/blockforms/updates.xml"
+}
+
