@@ -4,8 +4,7 @@
   "version": "0.0.27",
   "author": "Clay Smith",
   "short_name": "Block Forms",
-  "homepage_url": "https://www.claycodes.org",
- 
+
   "default_locale": "en",
   "description": "Block consumer forms from your domain.",
   "icons": {
@@ -33,7 +32,6 @@
     ],
     "exclude_matches":[],
     "js": ["contentscript.js"]
-  }],
-  "update_url": "https://extensionhosting.web.app/blockforms/updates.xml"
+  }]
 }
 
