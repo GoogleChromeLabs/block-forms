@@ -2,7 +2,7 @@
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
+* you may obtain a copy of the License at
 *
 *      http://www.apache.org/licenses/LICENSE-2.0
 *
@@ -24,72 +24,77 @@ document.addEventListener("DOMContentLoaded", function (event) {
  * @returns void
  */
 async function checkform() {
-  const domain = await getStorage('domain');
+  let organization = await getStorage('organization') || await getStorage('domain');
   let allowlist = await getStorage('allowlist') || [];
   let blocklist = await getStorage('blocklist') || [];
   let blockall = false;
+  if (allowlist && allowlist.length > 0) {
+    allowlist = allowlist.map(e => e.toString().toLowerCase());
+  }
 
-    if (allowlist && allowlist.length > 0) {
-      allowlist = allowlist.map(e => e.toString().toLowerCase());
-    }
+  if (blocklist && blocklist.length > 0) {
+    blocklist = blocklist.map(e => e.toString().toLowerCase());
+  }
 
-    if (blocklist && blocklist.length > 0) {
-      blocklist = blocklist.map(e => e.toString().toLowerCase());
-    }
-
-    if(domain && blocklist.includes('*')){
-      blockall = true;
-    }
+  if (blocklist.includes('*')) {
+    blockall = true;
+  }
 
   let external = document.querySelector('.v1CNvb.sId0Ce');
-    if(!external){
-      external = document.querySelector('.freebirdFormviewerViewFooterDisclaimer');
-    }
+  if (!external) {
+    external = document.querySelector('.freebirdFormviewerViewFooterDisclaimer');
+  }
 
-    if (!external) {
-      return;
-    }
+  if (!external) {
+    return;
+  }
 
   const block = external.innerText.includes(chrome.i18n.getMessage('outside')) || external.innerText.includes(chrome.i18n.getMessage('endorsed'));
-
   const a = external.querySelectorAll('a');
-    const regex = /(?:[\w-]+\.)+[\w-]+/gi;
+  const footer = external.textContent;
+
+  let formFooter = '';
+  if (footer) {
+    formFooter = footer.toString().toLowerCase().trim();
+  }
+
+  const regex = /(?:[\w-]+\.)+[\w-]+/gi;
   const testformdomain = external.innerText.match(regex);
-
   let formdomain;
-    if (testformdomain) {
-      formdomain = testformdomain[0].toString().toLowerCase();
-    }
+  if (testformdomain) {
+    formdomain = testformdomain[0].toString().toLowerCase();
+  }
 
-    function test(e) {
-      return e.includes(formdomain);
+  function test(e) {
+    if (!e) return false;
+    const target = e.toLowerCase().trim();
+    if (formdomain && (formdomain === target || formdomain.endsWith('.' + target))) {
+      return true;
     }
+    if (formFooter && target.length > 2 && formFooter.includes(target)) {
+      return true;
+    }
+    return false;
+  }
 
-    if (allowlist.some(test)) {
-      return;
-    }
+  if ([organization, ...allowlist].filter(Boolean).some(test)) {
+    return;
+  }
 
-    if (block || a.length >= 3 || blocklist.some(test) || blockall) {
-      rewrite();
-    }
+  if (block || !formdomain || a.length >= 3 || blocklist.some(test) || blockall) {
+    rewrite();
+  }
 }
 
-/**
- * Rewrite the site if the fom is blocked
- */
 function rewrite() {
-    newHTML = `<html>
-  <head>
-    <title>Blocked Form</title>
-  </head>
-  <body>
-    <p>This form originates outside the domain and is thereby blocked.</p>
-  </body>
-</html>`;
-
-  document.open();
-  document.write(newHTML);
-  document.close();
+  document.title = 'Blocked Form';
+  const newBodyHTML = `
+    <div style="padding: 2em; font-family: sans-serif; text-align: center;">
+      <h1>Access Denied</h1>
+      <p>This form originates outside the domain and is thereby blocked.</p>
+    </div>
+  `;
+  document.body.innerHTML = newBodyHTML;
 }
 
 /**
@@ -98,11 +103,11 @@ function rewrite() {
  * @returns
  */
 function getStorage(item) {
-    return new Promise((resolve, reject) => {
-        chrome.storage.local.get(item, (res) => {
-          resolve(res[item]);
-        });
+  return new Promise((resolve, reject) => {
+    chrome.storage.local.get(item, (res) => {
+      resolve(res[item]);
     });
+  });
 }
 
 

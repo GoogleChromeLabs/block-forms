@@ -1,10 +1,9 @@
 {
   "manifest_version": 3,
   "name": "Block Forms",
-  "version": "0.0.27",
+  "version": "0.0.32",
   "author": "Clay Smith",
   "short_name": "Block Forms",
-
   "default_locale": "en",
   "description": "Block consumer forms from your domain.",
   "icons": {
@@ -17,7 +16,7 @@
   },
   "permissions": [],
   "host_permissions": [
-    "*://docs.google.com/*"
+    "*://docs.google.com/forms/*"
   ],
   "storage": {
     "managed_schema": "schema.json"
@@ -27,10 +26,13 @@
 	},
   "content_scripts": [{
     "run_at":"document_start",
+    "all_frames": true,
     "matches": [
-      "*://docs.google.com/*"
+      "*://docs.google.com/forms/*"
     ],
-    "exclude_matches":[],
+    "exclude_globs": [
+      "*startquiz*"
+    ],
     "js": ["contentscript.js"]
   }]
 }

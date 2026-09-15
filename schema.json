@@ -1,14 +1,14 @@
 {
     "type": "object",
     "properties": {
-      "domain": {
-        "title": "Domain name",
-        "description": "Domain from the admin console.",
+      "organization": {
+        "title": "Organization name",
+        "description": "Organization Name from the admin console.",
         "type": "string"
       },
       "allowlist": {
         "title": "Allow List",
-        "description": "Allow listed domains",
+        "description": "Allow listed organizations",
         "type": "array",
         "items":{
             "type":"string"
@@ -16,7 +16,7 @@
       },
       "blocklist": {
         "title": "Block List",
-        "description": "Block Listed domains",
+        "description": "Block Listed organizations",
         "type": "array",
         "items":{
             "type":"string"

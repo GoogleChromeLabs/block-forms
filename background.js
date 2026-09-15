@@ -12,11 +12,22 @@
 * See the License for the specific language governing permissions and
 * limitations under the License. */
 
+const TEST_DATA = {
+  "organization": "",
+
+
+  "allowlist": [""],
+
+
+  "blocklist": ["*"]
+
+}
+
 /**
  * Set the User Domain in the storage
  */
-chrome.storage.managed.get('domain', function (data) {
-  data.type = 'domain';
+chrome.storage.managed.get('organization', function (data) {
+  data.type = 'organization';
   chrome.storage.local.set(data);
 });
 
